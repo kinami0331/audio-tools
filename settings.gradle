@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "Vernier"
+rootProject.name = "audio-tools"
