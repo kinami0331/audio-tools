@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Audio Tools</string>
+    <string name="record_source_text">录音源</string>
+    <string name="server_address">192.168.137.1:8844</string>
 </resources>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadingEdge="vertical"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Beep 控制台"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:text="server: "
+                android:textSize="20dp" />
+
+
+            <EditText
+                android:id="@+id/server_address_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="(ip:port)"
+                android:inputType="text"
+                android:selectAllOnFocus="true"
+                android:text="@string/server_address"
+                android:textColorHint="#95A1AA" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="实验参数设置"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="设置采样率:"
+                    android:textSize="20dp" />
+
+                <Spinner
+                    android:id="@+id/sampling_rate_choose"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:entries="@array/samplingRate" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:text="起始频率(Hz)："
+                    android:textSize="20dp" />
+
+
+                <EditText
+                    android:id="@+id/frequncy_lower_limit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+
+                    android:layout_weight="2"
+                    android:hint="(ip:port)"
+                    android:inputType="text"
+                    android:selectAllOnFocus="true"
+                    android:text="2000"
+                    android:textColorHint="#95A1AA" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:text="结束频率(Hz)："
+                    android:textSize="20dp" />
+
+
+                <EditText
+                    android:id="@+id/frequncy_upper_limit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+
+                    android:layout_weight="2"
+                    android:hint="(ip:port)"
+                    android:inputType="text"
+                    android:selectAllOnFocus="true"
+                    android:text="6000"
+                    android:textColorHint="#95A1AA" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="信号长度(ms)："
+                    android:textSize="20dp" />
+
+
+                <EditText
+                    android:id="@+id/chirp_time_text"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+
+                    android:layout_weight="2"
+                    android:inputType="text"
+                    android:selectAllOnFocus="true"
+                    android:text="100"
+                    android:textColorHint="#95A1AA" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="warm up(ms)："
+                    android:textSize="20dp" />
+
+
+                <EditText
+                    android:id="@+id/prepare_time_text"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+
+
+                    android:layout_weight="2"
+                    android:inputType="text"
+                    android:selectAllOnFocus="true"
+                    android:text="10"
+                    android:textColorHint="#95A1AA" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="声速(mps)："
+                    android:textSize="20dp" />
+
+
+                <EditText
+                    android:id="@+id/sound_speed_text"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+
+
+                    android:layout_weight="2"
+                    android:inputType="text"
+                    android:selectAllOnFocus="true"
+                    android:text="340"
+                    android:textColorHint="#95A1AA" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/start_experiment_with_two_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="用当前在线设备开始实验（暂时只支持双设备）" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="日志信息"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/experiment_log_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textview_border" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="图片显示"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/image_list_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/get_online_device_list_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取当前在线设备列表" />
+
+            <TextView
+                android:id="@+id/device_list_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textview_border" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

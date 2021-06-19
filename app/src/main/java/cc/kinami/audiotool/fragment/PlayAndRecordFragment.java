@@ -8,10 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.io.File;
@@ -21,11 +21,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import cc.kinami.audiotool.R;
+import cc.kinami.audiotool.util.WavPlayer;
 import tech.oom.idealrecorder.IdealRecorder;
 import tech.oom.idealrecorder.StatusListener;
 import tech.oom.idealrecorder.utils.Log;
 
-public class RecordFragment extends Fragment {
+public class PlayAndRecordFragment extends Fragment {
+
+    private static final String TAG = "[Beep]Record&PlayFrag";
 
     private View view;
 
@@ -48,7 +51,8 @@ public class RecordFragment extends Fragment {
 
         @Override
         public void onRecordError(int code, String errorMsg) {
-            status.setText("录音错误" + errorMsg);
+            status.setText("录音错误");
+            Toast.makeText(getContext(), "error: " + errorMsg, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -63,16 +67,19 @@ public class RecordFragment extends Fragment {
 
         @Override
         public void onStopRecording() {
-            status.setText("点击下方按钮以开始录音");
+            status.setText("等待录音");
         }
     };
+
+    private Spinner recordSourceSpinner;
     private IdealRecorder idealRecorder;
     private IdealRecorder.RecordConfig recordConfig;
+    private WavPlayer wavPlayer;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_record, container, false);
+        view = inflater.inflate(R.layout.fragment_play_and_record, container, false);
         return view;
     }
 
@@ -80,8 +87,10 @@ public class RecordFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         status = view.findViewById(R.id.status);
         idealRecorder = IdealRecorder.getInstance();
+        recordSourceSpinner = view.findViewById(R.id.record_source_choose);
         Button recordBtn = view.findViewById(R.id.record_btn);
         recordBtn.setText("开始录音");
         recordBtn.setOnClickListener(v -> {
@@ -97,16 +106,32 @@ public class RecordFragment extends Fragment {
             }
         });
 
+        Button playBtn = view.findViewById(R.id.play_btn);
+        playBtn.setText("播放chirp");
+        playBtn.setOnClickListener(v -> playWav());
+
         recordConfig = new IdealRecorder.RecordConfig(MediaRecorder.AudioSource.CAMCORDER,
                 IdealRecorder.RecordConfig.SAMPLE_RATE_44K_HZ,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
+
+        wavPlayer = new WavPlayer();
     }
+
 
     /**
      * 开始录音
      */
     private void record() {
+        int recordSource = recordSourceSpinner.getSelectedItemId() == 0
+                ? MediaRecorder.AudioSource.MIC
+                : MediaRecorder.AudioSource.CAMCORDER;
+        android.util.Log.i(TAG, "record: source: " + (recordSource == MediaRecorder.AudioSource.MIC ? "mic" : "camcorder"));
+        recordConfig = new IdealRecorder.RecordConfig(recordSource,
+                IdealRecorder.RecordConfig.SAMPLE_RATE_44K_HZ,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT);
+
         //如果需要保存录音文件  设置好保存路径就会自动保存  也可以通过onRecordData 回调自己保存  不设置 不会保存录音
         idealRecorder.setRecordFilePath(getSaveFilePath());
 //        idealRecorder.setWavFormat(false);
@@ -124,7 +149,7 @@ public class RecordFragment extends Fragment {
      * @return 文件的保存路径
      */
     private String getSaveFilePath() {
-        File file = new File(Environment.getExternalStorageDirectory(), "Audio");
+        File file = new File(Environment.getExternalStorageDirectory(), "Audio Tools");
         if (!file.exists()) {
             if (!file.mkdirs())
                 throw new IllegalStateException("创建文件夹失败");
@@ -142,6 +167,12 @@ public class RecordFragment extends Fragment {
     private void stopRecord() {
         //停止录音
         idealRecorder.stop();
+    }
+
+    public void playWav() {
+        if (wavPlayer.isWorking)
+            return;
+        wavPlayer.playWav("Audio Tools/chirp_for_experiment.wav", null);
     }
 
 

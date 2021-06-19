@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "cc.kinami.audiotool"
-        minSdkVersion 16
+        minSdkVersion 20
 //      安卓10的文件访问改为了沙盒模式，这里的targetSdkVersion暂时改为28
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
@@ -39,10 +39,20 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'org.jetbrains:annotations:15.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
     testImplementation 'junit:junit:4.13.2'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 
     implementation'com.github.ideastudios:IdealRecorder:2.0.4'
     implementation 'com.yanzhenjie:permission:2.0.3'
+
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
+    implementation "org.slf4j:slf4j-nop:1.7.25"
+
+    compile('com.github.bumptech.glide:glide:4.11.0')
+
 
     //implementation 'com.google.android.material:material:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

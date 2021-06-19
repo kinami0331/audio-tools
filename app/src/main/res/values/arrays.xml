@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="record_source">
+        <item>底部麦克风</item>
+        <item>顶部麦克风</item>
+    </string-array>
+
+    <string-array name="samplingRate">
+        <item>44100Hz</item>
+        <item>48000Hz</item>
+    </string-array>
+
+</resources>
