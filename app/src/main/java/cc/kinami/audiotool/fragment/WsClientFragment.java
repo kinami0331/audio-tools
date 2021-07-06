@@ -129,7 +129,15 @@ public class WsClientFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         serverAddrEditText = view.findViewById(R.id.server_address_input);
         deviceNameEditText = view.findViewById(R.id.device_name_input);
-        String deviceName = Build.MODEL;
+        String deviceName;
+        if (Build.MODEL.equals("H60-L01"))
+            deviceName = "A";
+        else if (Build.MODEL.equals("AUM-AL20"))
+            deviceName = "Z";
+        else
+            deviceName = Build.MODEL;
+
+
         deviceNameEditText.setText(deviceName.toCharArray(), 0, deviceName.length());
         connectButton = view.findViewById(R.id.connect_btn);
         connectButton.setOnClickListener(v -> connect());

@@ -83,11 +83,11 @@ public class ExperimentType2ControlFragment extends Fragment {
 
         Log.i(TAG, "onActivityCreated: this model:" + Build.MODEL);
         if (Build.MODEL.equals("H60-L01")) {
-            tarDeviceEditText.setText("AUM-AL20".toCharArray(), 0, "AUM-AL20".length());
-            masterDeviceEditText.setText("H60-L01".toCharArray(), 0, "H60-L01".length());
+            tarDeviceEditText.setText("Z".toCharArray(), 0, "Z".length());
+            masterDeviceEditText.setText("A".toCharArray(), 0, "A".length());
         } else {
-            masterDeviceEditText.setText("AUM-AL20".toCharArray(), 0, "AUM-AL20".length());
-            tarDeviceEditText.setText("H60-L01".toCharArray(), 0, "H60-L01".length());
+            masterDeviceEditText.setText("Z".toCharArray(), 0, "Z".length());
+            tarDeviceEditText.setText("A".toCharArray(), 0, "A".length());
         }
         startExperimentButton.setOnClickListener(v -> startExperiment());
         handler = new WorkHandler(this);
