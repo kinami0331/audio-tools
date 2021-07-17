@@ -138,10 +138,10 @@ public class BeepControlFragment extends Fragment {
 
                 Map<String, Double> argument = new HashMap<>();
                 switch ((int) ((Spinner) view.findViewById(R.id.sampling_rate_choose)).getSelectedItemId()) {
-                    case 0:
+                    case 1:
                         argument.put("samplingRate", 44100.0);
                         break;
-                    case 1:
+                    case 0:
                         argument.put("samplingRate", 48000.0);
                         break;
                     default:

@@ -139,7 +139,7 @@
                     android:hint="(ip:port)"
                     android:inputType="text"
                     android:selectAllOnFocus="true"
-                    android:text="6000"
+                    android:text="8000"
                     android:textColorHint="#95A1AA" />
 
             </LinearLayout>

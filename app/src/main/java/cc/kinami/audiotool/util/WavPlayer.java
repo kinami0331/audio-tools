@@ -62,7 +62,7 @@ public class WavPlayer {
             int audioFormat = params.getEncodingFormat();
             int minBufSize = AudioTrack.getMinBufferSize(simpleRate, channelConfig, audioFormat);
             Log.i(TAG, "playWav: simpleRate: " + simpleRate + ", channel: " + channelConfig + ", format: " + audioFormat + ", minBuf: " + minBufSize);
-            audioTrack = new AudioTrack(AudioManager.STREAM_ALARM, simpleRate, channelConfig, audioFormat, pcmSize,
+            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, simpleRate, channelConfig, audioFormat, pcmSize,
                     AudioTrack.MODE_STATIC);
             file.seek(44);
             int read = file.read(buffer);

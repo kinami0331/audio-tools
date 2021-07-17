@@ -54,22 +54,6 @@ public class WsClientFragment extends Fragment {
     String serverAddr;
     String deviceName;
     Double m2SLength;
-    Handler wsInfoTextHandler = new Handler() {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    wsInfoText.setText(wsInfoText.getText().toString() + msg.obj);
-                    break;
-                case 2:
-                    wsInfoText.setText("");
-                default:
-                    break;
-            }
-
-        }
-    };
     private WavPlayer wavPlayer;
     private IdealRecorder idealRecorder;
     private IdealRecorder.RecordConfig recordConfig;
@@ -90,7 +74,7 @@ public class WsClientFragment extends Fragment {
                         getSignalHandler(controlInfo.getExperimentId());
                         break;
                     case START_RECORD:
-                        startRecordHandler(controlInfo.getExperimentId(), controlInfo.getFrom(), controlInfo.getTo(), controlInfo.getMic());
+                        startRecordHandler(controlInfo.getExperimentId(), controlInfo.getFrom(), controlInfo.getTo(), controlInfo.getMic(), controlInfo.getFs());
                         break;
                     case PLAY_CHIRP:
                         playSignalHandler(controlInfo.getExperimentId());
@@ -117,6 +101,32 @@ public class WsClientFragment extends Fragment {
         }
 
     };
+    Handler wsInfoTextHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    wsInfoText.setText(wsInfoText.getText().toString() + msg.obj);
+                    break;
+                case 2:
+                    wsInfoText.setText("");
+                    break;
+                case 3:
+                    beepWebSocketClient = null;
+                    connectButton.setOnClickListener(v -> connect());
+                    connectButton.setText("连接服务器");
+                    wsStatusText.setText("wait for connection");
+                    serverAddrEditText.setEnabled(true);
+                    deviceNameEditText.setEnabled(true);
+                    wsM2SLengthText.setEnabled(true);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -130,12 +140,20 @@ public class WsClientFragment extends Fragment {
         serverAddrEditText = view.findViewById(R.id.server_address_input);
         deviceNameEditText = view.findViewById(R.id.device_name_input);
         String deviceName;
-        if (Build.MODEL.equals("H60-L01"))
-            deviceName = "A";
-        else if (Build.MODEL.equals("AUM-AL20"))
-            deviceName = "Z";
-        else
-            deviceName = Build.MODEL;
+        switch (Build.MODEL) {
+            case "H60-L01":
+                deviceName = "A";
+                break;
+            case "AUM-AL20":
+                deviceName = "Z";
+                break;
+            case "XT1650-05":
+                deviceName = "M";
+                break;
+            default:
+                deviceName = Build.MODEL;
+                break;
+        }
 
 
         deviceNameEditText.setText(deviceName.toCharArray(), 0, deviceName.length());
@@ -180,13 +198,9 @@ public class WsClientFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "closeConnect: ", e);
         } finally {
-            beepWebSocketClient = null;
-            connectButton.setOnClickListener(v -> connect());
-            connectButton.setText("连接服务器");
-            wsStatusText.setText("wait for connection");
-            serverAddrEditText.setEnabled(true);
-            deviceNameEditText.setEnabled(true);
-            wsM2SLengthText.setEnabled(true);
+            Message message = Message.obtain();
+            message.what = 3;
+            wsInfoTextHandler.sendMessage(message);
         }
     }
 
@@ -214,13 +228,13 @@ public class WsClientFragment extends Fragment {
 
     }
 
-    private void startRecordHandler(int experimentId, String from, String to, int mic) {
+    private void startRecordHandler(int experimentId, String from, String to, int mic, int fs) {
         sendMsgToWsInfoTest("[receive] START_RECORD\n"
                 + "    experiment id: " + experimentId + "\n"
                 + "    from: " + from + "\n"
                 + "      to: " + to + "\n");
 
-        startRecord(experimentId, mic);
+        startRecord(experimentId, mic, fs);
 
         sendMsgToWsInfoTest("[send] START_RECORD_ACK\n");
         sendControlInfo(ControlInfo.builder()
@@ -301,26 +315,29 @@ public class WsClientFragment extends Fragment {
                 "signal.wav");
     }
 
-    private void startRecord(int experimentId, int mic) {
+    private void startRecord(int experimentId, int mic, int fs) {
         idealRecorder = IdealRecorder.getInstance();
+        int micConfig = MediaRecorder.AudioSource.MIC, channelConfig = AudioFormat.CHANNEL_IN_MONO;
+
+
         switch (mic) {
             case 0:
                 Log.i(TAG, "startRecord: mic0");
-                recordConfig = new IdealRecorder.RecordConfig(MediaRecorder.AudioSource.MIC,
-                        IdealRecorder.RecordConfig.SAMPLE_RATE_44K_HZ,
-                        AudioFormat.CHANNEL_IN_MONO,
-                        AudioFormat.ENCODING_PCM_16BIT);
                 break;
             case 1:
                 Log.i(TAG, "startRecord: mic1");
-                recordConfig = new IdealRecorder.RecordConfig(MediaRecorder.AudioSource.CAMCORDER,
-                        IdealRecorder.RecordConfig.SAMPLE_RATE_44K_HZ,
-                        AudioFormat.CHANNEL_IN_MONO,
-                        AudioFormat.ENCODING_PCM_16BIT);
+                micConfig = MediaRecorder.AudioSource.CAMCORDER;
                 break;
             default:
                 throw new RuntimeException("something wrong");
         }
+
+
+        recordConfig = new IdealRecorder.RecordConfig(micConfig,
+                fs,
+                channelConfig,
+                AudioFormat.ENCODING_PCM_16BIT);
+
 
         //如果需要保存录音文件  设置好保存路径就会自动保存  也可以通过onRecordData 回调自己保存  不设置 不会保存录音
 //        idealRecorder.setRecordFilePath(Environment.getExternalStorageDirectory() + "/Audio Tools/experiments/" + experimentId + "/" + from + "_to_" + to + ".wav");

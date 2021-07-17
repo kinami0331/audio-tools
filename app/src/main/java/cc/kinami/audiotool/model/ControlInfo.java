@@ -17,4 +17,5 @@ public class ControlInfo {
     String to;
     Integer experimentType;
     Integer mic;
+    Integer fs;
 }
